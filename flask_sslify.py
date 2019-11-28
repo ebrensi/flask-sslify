@@ -78,7 +78,7 @@ class SSLify(object):
             request.headers.get('X-Forwarded-Proto', 'http') == 'https'
         ]
 
-        if not any(criteria) and not self.skip:
+        if not any(criteria) and not self.skip():
             if request.url.startswith('http://'):
                 url = request.url.replace('http://', 'https://', 1)
                 code = 302
@@ -90,7 +90,7 @@ class SSLify(object):
     def set_hsts_header(self, response):
         """Adds HSTS header to each response."""
         # Should we add STS header?
-        if request.is_secure and not self.skip:
+        if request.is_secure and not self.skip():
             response.headers.setdefault(
                 'Strict-Transport-Security', self.hsts_header)
         return response
